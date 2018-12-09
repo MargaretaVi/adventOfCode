@@ -12,7 +12,7 @@ int main() {
     /* Open File and add it to vector. */
     string _line;
     vector<int> dataLines;
-    ifstream myfile ("init.txt");
+    ifstream myfile ("test.txt");
     if (myfile.is_open())
     {
         while (getline (myfile,_line) )
