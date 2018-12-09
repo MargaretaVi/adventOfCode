@@ -41,35 +41,54 @@ int main() {
                 possibleMoves.push_back(possibleInstr);
             }
         }
-
         // sorting the list to get the first possible move 
         sort(possibleMoves.begin(), possibleMoves.end());
         possibleMoves.erase(unique(possibleMoves.begin(), possibleMoves.end()), possibleMoves.end());
+        
+        cout << "possible moves: \n";
+        for (auto possible: possibleMoves) {
+            cout << possible;
+        }
 
+        cout << "\n preList: \n";
+        for (auto p : preReq) {
+            cout << p;
+        }
+        cout << "\n instruction \n";
+        for (auto i : instruction) {
+            cout << i;
+        }    
         string currentInstruction = possibleMoves[0];
         instructionOrder.push_back(currentInstruction);
 
         // finding all the indices of this move.
         indexHolder.clear(); 
+        cout << "\n current instruction is: "<< possibleMoves[0] << endl;
         for (int i = 0; i < preReq.size(); i++) {
             if (preReq[i] == currentInstruction){
                 indexHolder.push_back(i);
             }
         }
+        if (indexHolder.size() == 0) {
+            cout << "\n No instructions to be made why? " << endl;
+            break;
+        }
+        // want to have the largest index first so that the list dont get ruined.
+        sort(indexHolder.begin(), indexHolder.end(), std::greater<int>());
         for (auto i : indexHolder) { 
             instruction.erase(instruction.begin() + i);
         }
         preReq.erase(remove(preReq.begin(),preReq.end(), currentInstruction), preReq.end());
     }
 
-    // adding the last instruction!
+    // adding the last instruction! not so smart...
     for (vector<string>::iterator iter = reserveInstructionList.begin(); iter != reserveInstructionList.end(); iter++) {
         if (find(instructionOrder.begin(), instructionOrder.end(), *iter) == instructionOrder.end()) {
             instructionOrder.push_back(*iter);
         }
     }
 
-    cout << "this is the order: \n";
+    cout << "\n this is the order: \n";
     for (auto instr: instructionOrder) {
         cout << instr;
     }
