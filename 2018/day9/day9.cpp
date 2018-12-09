@@ -40,7 +40,7 @@ int main() {
 
 
     int players = gameInfo[0];  
-    map<int,long> scores;
+    map<int,uint64_t> scores;
 
     // init all values to 0 so that we can increment the score later
     for (int i = 1; i <= players; i++) {
@@ -51,11 +51,12 @@ int main() {
     int currentMarble;
     int pos = 0;
     int playerNr = 1;
-    long long score = 0;
+    uint64_t score = 0;
     vector<int> circle = {0}; // playing board
     circle.reserve(rounds);
 
     for (auto r = 1; r <= rounds; r++) {
+        cout << "this might be stupid buit... " << r << endl;
         currentMarble = r;
 
         if (currentMarble % 23 == 0) {
@@ -111,9 +112,9 @@ int main() {
         score = 0;   
     } 
     int tmpWinner = 0;
-    int tmpScore = 0;
+    uint64_t tmpScore = 0;
     for (auto score : scores) {
-        //cout << "Player: " << score.first << " had this score: " << score.second << endl; 
+        cout << "Player: " << score.first << " had this score: " << score.second << endl; 
         if (score.second > tmpScore) {
             tmpScore = score.second;
             tmpWinner = score.first;

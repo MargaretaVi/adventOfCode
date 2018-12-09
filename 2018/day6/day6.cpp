@@ -36,7 +36,11 @@ int main () {
     string _line;
     vector<pair<int,int>> inputCoordinates;
     vector<int> xValues, yValues;
-    map<pair<int,int>, map<int,int>> board;
+
+    // first pair is the coordinate on the board
+    // second pair: ID for each point in input file, manhatan distance to the coordinate on the board
+    map<pair<int,int>, pair<int,int>> board;
+    
     ifstream myfile("test.txt");
 
      if (myfile.is_open()) {
@@ -56,75 +60,19 @@ int main () {
 
     tmp = max_element(yValues.begin(), yValues.end());
     int yMax = yValues[distance(yValues.begin(), tmp)];
-    int counter = 1;
-    int x,y;
-    cout << "max values: " << xMax << " " << yMax << endl; 
-    // set up all the values for the board.
-        for (x = 0; x <= xMax ; x++) {
-            for (y = 0; y <= yMax ; y++) {
-                counter = 1;
-                for (auto p: inputCoordinates) {
-                    int tmpXValue = p.first;
-                    int tmpYValue = p.second;
-                    int dist = INT_MAX; 
-                    // not on the boarder
-                    if (!(x == 0 || y == 0 || x == xMax || y == yMax ||tmpXValue == xMax || tmpYValue == yMax)) 
-                    {
-                        dist = calculateMHDist(tmpXValue, tmpYValue, x, y);
-                      /*  if (tmpXValue == 1) {
-                            cout << " cords " << x << "," << y << "   the distance: " << dist << "   my values " << tmpXValue << "," << tmpYValue <<'\n';
-                        }
-
-                        if (dist == 0) {
-                            cout << " cords " << x << "," << y << "  mmy input" << tmpXValue << "," << tmpYValue << '\n';
-                        }*/
-                    }
-                    board[pair<int, int> (x,y)][counter] = dist;
-                    counter ++;
-                }
+    
+    for (auto x = 0; x < xMax; x++) {
+        for (auto y = 0; y < yMax; y++) {
+            int pointId = 0;
+            for (auto p: inputCoordinates) {
+                if ()
+                int mHDist = calculateMHDist(p.first, p.second, x, y);
+                board[pair<int,int> (x,y)] = pair<int,int> (pointId, mHDist);
+                pointId++;
             }
-        }
-       
-    map<int,int> scoreHolder; 
-    // for each coordinate on the board
-
-    for (auto kv : board) {
-        int tempWinner = INT_MAX;
-        int distanceToMe = INT_MAX;
-        // for each input coordiante
-        for (auto innerKv : kv.second) {
-            if (innerKv.second < distanceToMe) {
-                distanceToMe = innerKv.second;
-                tempWinner = innerKv.first;
-            }
-            //cout << " coodinate : " << kv.first.first << "," << kv.first.second << " current " << innerKv.second << "  who am i_ " << innerKv.first << endl; // " challenger" << innerKv.second << endl;
-
-            if (innerKv.second == distanceToMe) {
-                continue;
-                //tempWinner = INT_MAX;
-            }
-        }
-        if (tempWinner != INT_MAX && distanceToMe !=INT_MAX) {
-            if (scoreHolder.count(tempWinner)) {
-                cout << " coodinate : " << kv.first.first << "," << kv.first.second << "   winner " << tempWinner << " ditnace " << distanceToMe << endl;
-                scoreHolder.at(tempWinner) += 1;
-            }
-            else {
-                scoreHolder[tempWinner] = 1;
-            }
-        }    
-    }
-
-    int area = 0;
-    int winner = INT_MAX; 
-    cout << "the size of score holder is " << scoreHolder.size() << endl;
-    for (auto coord : scoreHolder) {
-        if (coord.second > area) {
-            area = coord.second;
-            winner = coord.first;
         }
     }
+    
 
-    cout << "The alrgest area is : " << area << " and the coodinate winner is: " << winner << endl;
     return 0;
 }
