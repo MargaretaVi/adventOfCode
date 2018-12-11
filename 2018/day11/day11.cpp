@@ -18,7 +18,6 @@ int calcPowerLevel(int xCoord, int yCoord, int gridSerialNumber) {
     powerLevelStart += gridSerialNumber;
     //cout << "adding the serial number " << powerLevelStart << endl;
     powerLevelStart *= rackId;
-    //cout << "multiplying with the rack id " << powerLevelStart << endl;
     finalValue = hundredValue(powerLevelStart);
     return finalValue - 5;
 
@@ -28,9 +27,9 @@ int calcAreaPowerLevel(int xCoord, int yCoord, vector<vector<int>> board) {
     int totPowerLevel = 0;
     // input x and y is the top left corner of the square
     for (auto x = xCoord; x < xCoord + 2; x++) {
-        for(auto y = yCoord; y < yCoord + 2; y++)
-            cout << "x value: " << xCoord << "y value: " << yCoord << " power in this grid: " << board[x][y] << endl;
-            //totPowerLevel += board[x][y];
+        for(auto y = yCoord; y < yCoord + 2; y++) {
+            totPowerLevel += board[x][y];
+        }
     }
     return totPowerLevel;
 }
@@ -39,10 +38,10 @@ int main() {
     cout << "starting day 11" << endl;
     int gridSerialNumber = 42;
     // y, x (row by col)
-    vector<vector<int>> board(302, vector<int>(302,0));
-    //int test = calcPowerLevel(3, 5, gridSerialNumber);
+    vector<vector<int>> board(298, vector<int>(298,0));
+    //int test = calcPowerLevel(101, 153, 71);
     //int test = hundredValue(463278);
-   // cout << "this is the power level: " << test << endl;
+   //cout << "this is the power level: " << test << endl;
     for (auto x = 1; x < board.size()-1; x++) {
         for (auto y = 1; y < board[y].size()-1; y++) {
             board[x][y] = calcPowerLevel(x,y,gridSerialNumber);

@@ -40,17 +40,18 @@ void calcNewPos(vector<pair<int,int>> &Pos, vector<pair<int,int>> &velocity) {
     }
 }
 
-int calcArea(vector<pair<int,int>> newPos, vector<int> &limits) {
+uint64_t calcArea(vector<pair<int,int>> newPos, vector<int> &limits) {
     // sort on x values first
     sort(newPos.begin(), newPos.end(), [](auto & left, auto & right){return left.first < right.first;});
-    int area;
+    uint64_t area;
     limits.at(0) = newPos.at(0).first;
     limits.at(1) = newPos.at(newPos.size()-1).first;
     //n sort on y values
     sort(newPos.begin(), newPos.end(), [](auto & left, auto & right){return left.second < right.second;});
     limits.at(2) = newPos.at(0).second;
     limits.at(3) = newPos.at(newPos.size()-1).second;
-    return abs(limits[0]- limits[1]) * abs(limits[2]-limits[3]);
+    area = abs(limits[0]- limits[1]) * abs(limits[2]-limits[3]);
+    return area;
 
 }
 
@@ -62,16 +63,20 @@ void clearBoard(vector<vector<char>> &board) {
     }
 }
 
-void drawing(vector<pair<int,int>> &positions, vector<int> limits, vector<vector<char>> &board) {
-    int xMin = limits[0];
-    int xMax = limits[1];
-
-    int yMin = limits[2];
-    int yMax = limits[3];
-
+void drawing(vector<pair<int,int>> &positions, vector<int> limits) {
+    sort(positions.begin(), positions.end(), [](auto & left, auto & right){return left.first < right.first;});
+    int xMin = positions.at(0).first;
+    int xMax = positions.at(positions.size()-1).first;
+    //n sort on y values
+    sort(positions.begin(), positions.end(), [](auto & left, auto & right){return left.second < right.second;});
+    int yMin = positions.at(0).second;
+    int yMax = positions.at(positions.size()-1).second;
+    static vector<vector<char>> board ((yMax- yMin)+ 1, vector<char>(1+ (xMax- xMin), '.'));
+    int sizeY = (yMax- yMin);
+    int sizeX = (xMax- xMin);
     // needs to offset so that we dont work with negative values
-    for (auto p : positions) {;
-        board[p.second + abs(yMin)][p.first + abs(xMin)] = '#';
+    for (auto p : positions) {
+        board[p.second - yMin][p.first - xMin] = '#';
     }
 
     for (int i = 0; i < board.size(); i++) {
@@ -80,12 +85,11 @@ void drawing(vector<pair<int,int>> &positions, vector<int> limits, vector<vector
         }
         cout << '\n';
     }
-    cout << "this is the final size of the coordiantes. " << positions.size() << endl;
 }
 
 int main () {
     string _line;
-    ifstream myfile ("test.txt");
+    ifstream myfile ("init.txt");
     vector<string> data;
     vector<pair<int,int>> positions;
     vector<pair<int,int>> velocity;
@@ -111,21 +115,24 @@ int main () {
     }
 
     appendToVectors(positions, velocity, data);
-    auto originalArea = calcArea(positions, limits);
-    static vector<vector<char>> board ((limits[3]- limits[2]) + 10 , vector<char>( 10 +(limits[1] - limits[0]), '.'));
+    uint64_t originalArea = calcArea(positions, limits);
+    
 
-    //drawing(positions,limits, board); 
-    //clearBoard(board);
-
-    auto tmpArea = 0;
-    auto smallArea = originalArea;
-    while(tmpArea < originalArea) {
-        cout << "this is the current tmpArea " << tmpArea << " orignal area: " << originalArea << endl;
-        calcNewPos(positions, velocity);
+    uint64_t tmpArea = 0;
+    uint64_t minArea = INT_MAX;
+    vector<pair<int,int>> smallPos;
+    int secks;
+    for (int x = 0; x< 15000; x++) {
         tmpArea = calcArea(positions, limits);
+        if (tmpArea < minArea) {
+            minArea = tmpArea;
+            smallPos = positions;
+            secks = x;
+        }
+        calcNewPos(positions, velocity);
+
     }
-
-    //drawing(positions,limits,board);   
-
+    drawing(smallPos,limits);   
+    cout << "time to wait: " << secks << endl; 
     return 0;
 }
