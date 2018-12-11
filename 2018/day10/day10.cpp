@@ -114,17 +114,18 @@ int main () {
     auto originalArea = calcArea(positions, limits);
     static vector<vector<char>> board ((limits[3]- limits[2]) + 10 , vector<char>( 10 +(limits[1] - limits[0]), '.'));
 
-    drawing(positions,limits, board); 
-    clearBoard(board);
+    //drawing(positions,limits, board); 
+    //clearBoard(board);
 
-   
-   for(auto i = 0; i< 5 ; i++) {
+    auto tmpArea = 0;
+    auto smallArea = originalArea;
+    while(tmpArea < originalArea) {
+        cout << "this is the current tmpArea " << tmpArea << " orignal area: " << originalArea << endl;
         calcNewPos(positions, velocity);
-        drawing(positions,limits,board);  
-        clearBoard(board);
+        tmpArea = calcArea(positions, limits);
     }
 
-    //drawing(positions,limits);   
+    //drawing(positions,limits,board);   
 
     return 0;
 }
