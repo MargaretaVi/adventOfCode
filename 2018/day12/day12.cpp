@@ -67,12 +67,19 @@ int main() {
         string lastGen = plantStates.back().second;
         string::iterator it = lastGen.begin();
         vector<int> indices;
-        while ((it = find_if(it, lastGen.end(), "#")) != lastGen.end()) {
-            int tmpIndex = it - lastGen.begin();
-            indices.push_back(tmpIndex);
+        string valueToFind = "#";
+        size_t pos = lastGen.find(valueToFind);
+
+        while( pos != string::npos) {
+            indices.push_back(pos);
+            pos = lastGen.find(valueToFind, pos + valueToFind.size());
         }
 
-        plantStates.push_back(pair<int, string> (g, lastGen));
+        for (auto ind : indices) {
+            string tmp = "";
+            // fix so that we update the generation with the instructions...
+            //plantStates.push_back(pair<int, string> (ind, lastGen));
+        }
     }
 
 
